@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { useForm } from "react-hook-form";
@@ -7,15 +7,13 @@ import { insertUserSchema, type InsertUser } from "@shared/schema";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Loader2, ArrowLeft } from "lucide-react";
-import { Link } from "wouter";
+import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
-// Login schema is slightly different (just username/password)
+// Login schema
 const loginSchema = z.object({
   username: z.string().email("Please enter a valid email"),
   password: z.string().min(1, "Password is required"),
@@ -25,17 +23,14 @@ type LoginData = z.infer<typeof loginSchema>;
 
 export default function AuthPage() {
   const [, setLocation] = useLocation();
-  const { user, login, signup } = useAuth();
-  
-  // Get 'tab' query param manually since wouter doesn't have a built-in hook for it
+  const { login, signup } = useAuth();
+
+  // UI error messages
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [signupError, setSignupError] = useState<string | null>(null);
+
   const searchParams = new URLSearchParams(window.location.search);
   const defaultTab = searchParams.get("tab") === "signup" ? "signup" : "login";
-
-  useEffect(() => {
-    if (user) {
-      setLocation("/");
-    }
-  }, [user, setLocation]);
 
   const loginForm = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
@@ -47,26 +42,32 @@ export default function AuthPage() {
     defaultValues: { email: "", password: "", name: "" },
   });
 
+  // 🔐 LOGIN — redirect immediately on success
   async function onLogin(data: LoginData) {
+    setLoginError(null);
     try {
       await login.mutateAsync(data);
-    } catch (e) {
-      // Error handled by mutation onError
+      setLocation("/home"); // ✅ redirect to home
+    } catch (err: any) {
+      setLoginError(err?.message || "Invalid email or password");
     }
   }
 
+  // 🔐 SIGNUP — redirect immediately on success
   async function onSignup(data: InsertUser) {
+    setSignupError(null);
     try {
       await signup.mutateAsync(data);
-    } catch (e) {
-      // Error handled by mutation onError
+      setLocation("/home"); // ✅ redirect to home
+    } catch (err: any) {
+      setSignupError(err?.message || "Email already in use");
     }
   }
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-background">
-      {/* Visual Side */}
-      <div className="hidden lg:flex flex-col justify-center items-center bg-secondary/20 relative overflow-hidden p-12">
+      {/* LEFT SIDE */}
+      <div className="hidden lg:flex flex-col justify-center items-center bg-secondary/20 relative p-12">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-background" />
         <div className="relative z-10 max-w-lg text-center space-y-6">
           <motion.div
@@ -74,63 +75,38 @@ export default function AuthPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-5xl font-display font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">
+            <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">
               Master Your Skills
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Join thousands of learners unlocking their potential with our premium mini-courses. Start your journey today.
+            <p className="text-xl text-muted-foreground">
+              Join thousands of learners and start your journey today.
             </p>
-          </motion.div>
-          
-          {/* Decorative elements */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="grid grid-cols-2 gap-4 mt-8"
-          >
-            <div className="bg-card/50 backdrop-blur-md p-6 rounded-2xl border border-white/5">
-              <div className="text-3xl font-bold text-primary mb-1">50+</div>
-              <div className="text-sm text-muted-foreground">Premium Courses</div>
-            </div>
-            <div className="bg-card/50 backdrop-blur-md p-6 rounded-2xl border border-white/5">
-              <div className="text-3xl font-bold text-emerald-400 mb-1">24/7</div>
-              <div className="text-sm text-muted-foreground">Expert Support</div>
-            </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Form Side */}
-      <div className="flex items-center justify-center p-6 lg:p-12">
-        <motion.div 
+      {/* RIGHT SIDE */}
+      <div className="flex items-center justify-center p-6">
+        <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}
           className="w-full max-w-md space-y-6"
         >
-          <div className="flex items-center gap-2 mb-8">
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground pl-0">
-                <ArrowLeft className="w-4 h-4" />
-                Back to Home
-              </Button>
-            </Link>
-          </div>
-
-          <Tabs defaultValue={defaultTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-8">
+          <Tabs defaultValue={defaultTab}>
+            <TabsList className="grid grid-cols-2 mb-6">
               <TabsTrigger value="login">Login</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
 
+            {/* LOGIN */}
             <TabsContent value="login">
-              <Card className="border-none shadow-none bg-transparent">
-                <CardHeader className="px-0 pt-0">
-                  <CardTitle className="text-3xl font-display">Welcome back</CardTitle>
-                  <CardDescription>Enter your credentials to access your account</CardDescription>
+              <Card className="border-none bg-transparent">
+                <CardHeader>
+                  <CardTitle>Welcome back</CardTitle>
+                  <CardDescription>Sign in to your account</CardDescription>
                 </CardHeader>
-                <CardContent className="px-0">
+                <CardContent>
                   <Form {...loginForm}>
                     <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
                       <FormField
@@ -140,7 +116,7 @@ export default function AuthPage() {
                           <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                              <Input placeholder="hello@example.com" {...field} className="h-12" />
+                              <Input {...field} className="h-12" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -153,14 +129,19 @@ export default function AuthPage() {
                           <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                              <Input type="password" placeholder="••••••••" {...field} className="h-12" />
+                              <Input type="password" {...field} className="h-12" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                      <Button type="submit" className="w-full h-12 text-base mt-2" disabled={login.isPending}>
-                        {login.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Sign In"}
+
+                      {loginError && (
+                        <p className="text-sm text-red-500">{loginError}</p>
+                      )}
+
+                      <Button type="submit" className="w-full h-12" disabled={login.isPending}>
+                        {login.isPending ? <Loader2 className="animate-spin" /> : "Sign In"}
                       </Button>
                     </form>
                   </Form>
@@ -168,13 +149,14 @@ export default function AuthPage() {
               </Card>
             </TabsContent>
 
+            {/* SIGNUP */}
             <TabsContent value="signup">
-              <Card className="border-none shadow-none bg-transparent">
-                <CardHeader className="px-0 pt-0">
-                  <CardTitle className="text-3xl font-display">Create an account</CardTitle>
-                  <CardDescription>Enter your details to get started</CardDescription>
+              <Card className="border-none bg-transparent">
+                <CardHeader>
+                  <CardTitle>Create an account</CardTitle>
+                  <CardDescription>Get started in seconds</CardDescription>
                 </CardHeader>
-                <CardContent className="px-0">
+                <CardContent>
                   <Form {...signupForm}>
                     <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-4">
                       <FormField
@@ -184,7 +166,7 @@ export default function AuthPage() {
                           <FormItem>
                             <FormLabel>Full Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="John Doe" {...field} className="h-12" />
+                              <Input {...field} className="h-12" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -197,7 +179,7 @@ export default function AuthPage() {
                           <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                              <Input placeholder="hello@example.com" {...field} className="h-12" />
+                              <Input {...field} className="h-12" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -210,14 +192,19 @@ export default function AuthPage() {
                           <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                              <Input type="password" placeholder="••••••••" {...field} className="h-12" />
+                              <Input type="password" {...field} className="h-12" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                      <Button type="submit" className="w-full h-12 text-base mt-2" disabled={signup.isPending}>
-                        {signup.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Create Account"}
+
+                      {signupError && (
+                        <p className="text-sm text-red-500">{signupError}</p>
+                      )}
+
+                      <Button type="submit" className="w-full h-12" disabled={signup.isPending}>
+                        {signup.isPending ? <Loader2 className="animate-spin" /> : "Create Account"}
                       </Button>
                     </form>
                   </Form>
