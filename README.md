@@ -42,7 +42,7 @@ cd ..
 
 Create a `.env` file in the root directory:
 
-DATABASE_URL=postgresql://username:password@localhost:5432/course_host  
+DATABASE_URL=postgresql://username:******@localhost:5432/course_host  
 PORT=5000  
 NODE_ENV=development  
 
