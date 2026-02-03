@@ -1,88 +1,101 @@
-Course Host – Full Stack Application
+# Course Host – Full Stack Application
 
 A full-stack course hosting web application where users can sign up, log in, and browse available courses.
 
-Tech Stack
+---
 
-Frontend: React, Vite, TypeScript, Tailwind CSS
-Backend: Node.js, Express, TypeScript
-Database: PostgreSQL
-Deployment: Render
+## Tech Stack
 
-Features
+Frontend: React, Vite, TypeScript, Tailwind CSS  
+Backend: Node.js, Express, TypeScript  
+Database: PostgreSQL  
+Deployment: Render  
 
-User authentication (Sign Up & Login)
-Session-based authentication
-Browse available courses
-View course details
-Responsive UI
-PostgreSQL database integration
+---
 
-Local Development Setup
-1. Clone Repository
+## Features
 
-git clone https://github.com/Jaswanthchowdary18/Course-host.git
+- User authentication (Sign Up & Login)
+- Session-based authentication
+- Browse available courses
+- View course details
+- Responsive UI
+- PostgreSQL database integration
 
-cd Course-host
+---
 
-2. Install Dependencies
+## Local Development Setup
 
-npm install
-cd client
-npm install
-cd ..
+### Clone Repository
 
-3. Environment Variables
+git clone https://github.com/Jaswanthchowdary18/Course-host.git  
+cd Course-host  
 
-Create a .env file in the root directory and add:
+### Install Dependencies
 
-DATABASE_URL=postgresql://username:password@localhost:5432/course_host
-PORT=5000
-NODE_ENV=development
+npm install  
+cd client  
+npm install  
+cd ..  
 
-4. Run Application
+### Environment Variables
 
-npm run dev
+Create a `.env` file in the root directory:
 
-Application runs at:
-http://localhost:5000
+DATABASE_URL=postgresql://username:password@localhost:5432/course_host  
+PORT=5000  
+NODE_ENV=development  
 
-Deployment on Render
-1. Create PostgreSQL Database
+### Run Application
 
-Go to Render Dashboard
-Click New → PostgreSQL
-Create database
-Copy the Internal Database URL
+npm run dev  
 
-2. Create Web Service
+Application runs at:  
+http://localhost:5000  
 
-Render → New → Web Service
-Connect GitHub repository
-Select branch: main
-Runtime: Node
+---
 
-Build Command:
-npm install && npm run build
+## Deployment on Render
 
-Start Command:
-npm run start
+### Create PostgreSQL Database
 
-3. Add Environment Variables on Render
+Render Dashboard → New → PostgreSQL  
+Create database  
+Copy Internal Database URL  
 
-DATABASE_URL=<render-postgres-internal-url>
-NODE_ENV=production
+### Create Web Service
 
-4. Deploy
+Render → New → Web Service  
+Connect GitHub repository  
+Select branch: main  
+Runtime: Node  
 
-Click Deploy
-Render will automatically deploy on every GitHub push
+Build Command:  
+npm install && npm run build  
 
-Notes
+Start Command:  
+npm run start  
 
-Free Render instances may sleep when inactive and take up to 50 seconds to wake up.
-Make sure the server listens on process.env.PORT in production.
+### Environment Variables (Render)
 
-Author
+DATABASE_URL=<render-postgres-internal-url>  
+NODE_ENV=production  
+
+### Deploy
+
+Click Deploy  
+Render will automatically deploy on every GitHub push  
+
+---
+
+## Notes
+
+- Free Render instances may sleep during inactivity
+- First request may take up to 50 seconds
+- Server must listen on process.env.PORT in production
+
+---
+
+## Author
 
 Jaswanth Chowdary
