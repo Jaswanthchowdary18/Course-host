@@ -24,6 +24,10 @@ Deployment: Render
 
 ---
 
+Live Hosted Link- https://course-host-ynpa.onrender.com/my-courses
+
+---
+
 Login page
 <img width="2511" height="1271" alt="image" src="https://github.com/user-attachments/assets/40014335-aa6a-4d6f-959f-a981211a4660" />
 
