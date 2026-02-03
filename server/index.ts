@@ -19,7 +19,7 @@ app.use(
     verify: (req, _res, buf) => {
       req.rawBody = buf;
     },
-  }),
+  })
 );
 
 app.use(express.urlencoded({ extended: false }));
@@ -85,8 +85,7 @@ app.use((req, res, next) => {
 
   const port = parseInt(process.env.PORT || "5000", 10);
 
-  // ✅ WINDOWS-SAFE LISTEN
-  httpServer.listen(port, "127.0.0.1", () => {
-    log(`serving on http://localhost:${port}`);
+  httpServer.listen(port, "0.0.0.0", () => {
+    log(`serving on port ${port}`);
   });
 })();
