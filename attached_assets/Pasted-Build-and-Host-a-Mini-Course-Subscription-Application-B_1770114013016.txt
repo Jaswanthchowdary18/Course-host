@@ -1,0 +1,210 @@
+Build and Host a Mini Course Subscription Application (Black-Friday Edition)
+
+Objective
+Develop a full-stack web application where users can sign up, view courses, and subscribe based on whether a course is free or paid. The application must include a frontend, backend, database, and cloud hosting.
+
+🔔 Important: No real payments are required. Everything should be mock-based.
+Even for paid courses, the promo code simply reduces the mock price.
+
+Go To Guidelines:
+Authentication
+Frontend
+Backend
+Subscription logic
+Database
+Hosting and Deployment
+Submission
+Guidelines:
+
+
+1. Authentication:
+The application must be secured with authentication, using either JWT or a session token. It is not required to implement full authentication flows such as user registration. A simple login page with a few pre-created users is sufficient, Just include the 2 to 3 dummy user credentials in your submission.
+2. Frontend (React):
+Build the following pages:
+List of Pages Should be Created:
+Signup + Login 
+Home Page - Where the user can purchase courses
+My Course Page - Lists all the courses the user is enrolled in
+Course Details Page
+The detailed requirements of each page are outlined below:
+📄 Signup + Login Page 
+Fields:
+Email
+
+
+Password
+
+
+Name (optional)
+
+
+Requirements:
+Basic form validation
+
+
+Call backend auth APIs
+
+
+Store JWT token in localStorage/sessionStorage
+
+
+Redirect to Home after login
+
+📄 Home Page
+Display a list of at least 5 courses(Use Mock data), each containing:
+Title
+
+
+Description
+
+
+Price (Free or Paid)
+
+
+Thumbnail image (optional but recommended)
+
+
+Each card should link to the Course Detail Page.
+
+
+📄 Course Detail Page
+Display:
+Course title
+
+
+Full description
+
+
+Price
+
+
+Course image (optional)
+
+
+Subscription Logic:
+If the course is FREE
+Show “Subscribe” button
+
+
+Allow instant subscription (no promo required)
+
+
+If the course is PAID
+Show the following:
+Promo code input box
+
+
+“Apply Promo Code” button
+
+
+“Subscribe” button (disabled until promo is validated)
+
+Valid Promo Code which gives 50% discount is - BFSALE25 
+Remember: Payment is mock-only (no real payment integration required).
+
+📄 My Courses Page
+Show all courses the user subscribed to, including:
+Course title
+
+
+Price paid
+
+
+Subscription date
+
+
+Thumbnail (optional)
+
+
+Styling (Optional But Recommended)
+TailwindCSS or Bootstrap
+
+
+Clean UI
+
+
+Toast notifications for success/fail actions
+
+
+3. Backend (Node.js + Express)
+Build the following APIs:
+Auth
+POST /auth/signup
+
+
+POST /auth/login
+Return JWT token upon successful login.
+
+
+Courses
+GET /courses - fetch all courses
+
+
+GET /courses/:id - fetch one course by ID
+
+
+Subscriptions
+POST /subscribe
+Backend Subscription Logic
+Check course type
+
+
+If free → allow subscription instantly
+
+
+If paid → ensure promo code is provided
+
+
+Validate promo:
+
+
+Only BFSALE25 gives 50% discount
+
+
+Compute mock price after discount
+
+
+Save subscription document
+
+
+Fields to store:
+userId
+
+
+courseId
+
+
+pricePaid
+
+
+subscribedAt
+
+User Courses
+GET /my-courses – return all courses the authenticated user subscribed to
+4. Database (MongoDB or PostgreSQL)
+Required tables/collections:
+Users: id, name, email, password (hashed)
+Courses: id, title, description, price (0 = free), image(optional)
+Subscriptions: id, userId, courseId, pricePaid, subscribedAt
+
+The routes and schema provided are for illustration purposes only. It is not mandatory to follow the exact schema.
+Bonus (Optional)
+Better promo validation UX
+
+
+Loading states and skeletons
+
+
+Responsive design
+
+
+Error boundary pages
+
+
+Add images for courses for better UI
+
+
+Protect routes using auth middleware
+
+
+Display original price vs discounted price
