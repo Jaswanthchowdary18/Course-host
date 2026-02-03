@@ -24,6 +24,21 @@ Deployment: Render
 
 ---
 
+Login page
+<img width="2511" height="1271" alt="image" src="https://github.com/user-attachments/assets/40014335-aa6a-4d6f-959f-a981211a4660" />
+
+Home page
+<img width="2468" height="1267" alt="image" src="https://github.com/user-attachments/assets/b3f50261-17d4-4592-914d-09a66596c40e" />
+
+Course Detail
+<img width="2428" height="1301" alt="image" src="https://github.com/user-attachments/assets/882ef58f-3df5-4723-baae-2ce5415de1a1" />
+
+My Courses
+<img width="2430" height="1251" alt="image" src="https://github.com/user-attachments/assets/4dcab743-0d32-470d-a197-c275a19a2ba1" />
+
+
+
+
 ## Local Development Setup
 
 ### Clone Repository
